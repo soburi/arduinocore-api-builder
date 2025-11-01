@@ -25,3 +25,39 @@ jobs:
         run: |
           (cd arduinocore-api-lib ; make fetch)
           (cd arduinocore-api-lib ; make TOOLCHAIN_PREFIX=$(pwd)/../arm-zephyr-eabi/bin/arm-zephyr-eabi-)
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ github.ref_name }}
+          path: arduinocore-api-lib/build/lib/*
+          if-no-files-found: error
+          retention-days: 3
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    container: zephyrprojectrtos/ci-base:latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write            # Release作成に必要
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-${{ github.ref_name }}
+          path: ./release
+
+      # タグのときだけ Release を作成し、artifact を添付
+      - name: Create GitHub Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          generate_release_notes: true
+          files: |
+            release/*
+          prerelease: ${{ contains(github.ref_name, '-rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
