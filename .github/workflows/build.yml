@@ -14,13 +14,14 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-          path: subfolder
+          path: arduinocore-api-lib
 
       - name: Setup Toolchain
         run: |
-          wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v1.0.0-beta1/toolchain_gnu_linux-x86_64_arm-zephyr-eabi.tar.xz
-          tar xvf toolchain_gnu_linux-x86_64_arm-zephyr-eabi.tar.xz
+          wget -q https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v1.0.0-beta1/toolchain_gnu_linux-x86_64_arm-zephyr-eabi.tar.xz
+          tar xf toolchain_gnu_linux-x86_64_arm-zephyr-eabi.tar.xz
+
       - name: Build static libs
         run: |
-          make fetch
-          make TOOLCHAIN_PREFIX=`pwd`/arm-zephyr-eabi/bin/arm-zephyr-eabi-
+          (cd arduinocore-api-lib ; make fetch)
+          (cd arduinocore-api-lib ; make TOOLCHAIN_PREFIX=$(pwd)/../arm-zephyr-eabi/bin/arm-zephyr-eabi-)
