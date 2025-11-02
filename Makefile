@@ -29,7 +29,14 @@ CXXFLAGS := $(COMMON_FLAGS) $(WARNING_FLAGS) $(ARCH_FLAGS) -fcheck-new -std=c++1
 
 INCLUDES = -IArduinoCore-API/api
 
-SOURCES := $(shell find $(SRC_DIR) -name '*.cpp' 2>/dev/null)
+SOURCES := $(SRC_DIR)/CanMsgRingbuffer.cpp \
+	   $(SRC_DIR)/IPAddress.cpp \
+	   $(SRC_DIR)/PluggableUSB.cpp \
+	   $(SRC_DIR)/Print.cpp \
+	   $(SRC_DIR)/Stream.cpp \
+	   $(SRC_DIR)/String.cpp \
+
+
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SOURCES))
 
 .PHONY: all clean fetch
