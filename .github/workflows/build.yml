@@ -24,7 +24,9 @@ jobs:
       - name: Build static libs
         run: |
           (cd arduinocore-api-lib ; make fetch)
-          (cd arduinocore-api-lib ; make TOOLCHAIN_PREFIX=$(pwd)/../arm-zephyr-eabi/bin/arm-zephyr-eabi-)
+          (cd arduinocore-api-lib ; make TOOLCHAIN_PREFIX=$(pwd)/../arm-zephyr-eabi/bin/arm-zephyr-eabi- CPU_ARCH=cortex-m0plus)
+          (cd arduinocore-api-lib ; make TOOLCHAIN_PREFIX=$(pwd)/../arm-zephyr-eabi/bin/arm-zephyr-eabi- CPU_ARCH=cortex-m33)
+          (cd arduinocore-api-lib ; make TOOLCHAIN_PREFIX=$(pwd)/../arm-zephyr-eabi/bin/arm-zephyr-eabi- CPU_ARCH=cortex-m4)
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
